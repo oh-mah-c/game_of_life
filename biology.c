@@ -24,8 +24,9 @@ int count_living_cells(int **env, int r, int c)
     return count;
 }
 
-void process_life_cycle(int **current_env, int **next_env)
+int process_life_cycle(int **current_env, int **next_env)
 {
+    int population = 0;
     for (int i = 0; i < ROWS; i++)
     {
         for (int j = 0; j < COLS; j++)
@@ -49,12 +50,22 @@ void process_life_cycle(int **current_env, int **next_env)
                 if (living_neighbors == 3)
                 {
                     next_env[i][j] = 1;
+                    population++;
                 }
                 else
                 {
-                    next_env[i][j] = 0;
+                    if (state >= 3 && state < 6)
+                    {
+                        next_env[i][j] = state + 1;
+                    }
+                    else
+                    {
+                        next_env[i][j] = 0;
+                    }
                 }
             }
         }
     }
+
+    return population;
 }

@@ -17,13 +17,18 @@ int main()
     {
         clear_console();
         render_frame(current_env);
-        process_life_cycle(current_env, next_env);
+        int current_population = process_life_cycle(current_env, next_env);
+
+        if (current_population < (ROWS * COLS) / 20)
+        {
+            seed_population(next_env);
+        }
 
         temp = current_env;
         current_env = next_env;
         next_env = temp;
 
-        usleep(TICK_RATE_MS * 1000);
+        usleep(TICK_RATE_MS * 10000);
     }
 
     free_enviroment(current_env);

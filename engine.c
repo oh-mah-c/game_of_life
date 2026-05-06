@@ -37,28 +37,62 @@ void seed_population(int **env)
 
 void render_frame(int **env)
 {
+    char buffer[ROWS * COLS * 30 + ROWS + 1];
+    int pos = 0;
+
     for (int i = 0; i < ROWS; i++)
     {
         for (int j = 0; j < COLS; j++)
         {
-            if (env[i][j] == 0)
+            const char *symbol = EMPTY;
+            if (env[i][j] == 1)
             {
-                printf("%s", EMPTY);
-            }
-            else if (env[i][j] == 1)
-            {
-                printf("%s", MITOSIS);
+                symbol = MITOSIS;
             }
             else if (env[i][j] == 2)
             {
-                printf("%s", APOPTOSIS);
+                symbol = MATURE;
             }
+            else if (env[i][j] == 3)
+            {
+                symbol = APOPTOSIS;
+            }
+            else if (env[i][j] == 4)
+            {
+                symbol = FADE1;
+            }
+            else if (env[i][j] == 5)
+            {
+                symbol = FADE2;
+            }
+            else if (env[i][j] == 6)
+            {
+                symbol = FADE3;
+            }
+
+            int len = sprintf(&buffer[pos], "%s", symbol);
+            pos += len;
         }
-        printf("\n");
+        buffer[pos++] = '\n';
     }
+    buffer[pos] = '\0';
+
+    fputs(buffer, stdout);
+    fflush(stdout);
 }
 
 void clear_console()
 {
-    printf("\033[H\033[J");
+    static int first_run = 1;
+    if (first_run)
+    {
+        printf("\033[?25l\033[H\033[J");
+        first_run = 0;
+    }
+    else
+    {
+        printf("\033[H");
+    }
+
+    fflush(stdout);
 }
